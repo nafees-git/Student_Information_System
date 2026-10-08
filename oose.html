@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Profile Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- ── Header ── -->
+    <header class="header">
+      <div class="logo-block">
+        <h1>Student<span>.</span>DB</h1>
+        <p>Profile Manager System</p>
+      </div>
+      <div class="header-right">
+        <div class="stats-row">
+          <div class="stat-pill"><strong id="total-count">0</strong> total</div>
+          <div class="stat-pill"><strong id="dept-count">0</strong> departments</div>
+        </div>
+        <button class="btn btn-primary btn-full-mobile" onclick="openModal()">+ Add Student</button>
+      </div>
+    </header>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" id="search-input"
+          placeholder="Search by name, ID, or email..."
+          oninput="renderCards()"
+          aria-label="Search students">
+      </div>
+      <select id="sort-select" onchange="renderCards()" aria-label="Sort students">
+        <option value="name">Sort: Name</option>
+        <option value="id">Sort: Student ID</option>
+        <option value="age">Sort: Age</option>
+        <option value="dept">Sort: Department</option>
+      </select>
+    </div>
+    <div class="filter-tabs" id="filter-tabs" role="tablist" aria-label="Filter by department">
+      <button class="tab active" data-dept="all" onclick="setFilter('all', this)" role="tab">All</button>
+    </div>
+    <main class="student-grid" id="student-grid" aria-live="polite"></main>
+
+  </div>
+
+  <div class="overlay" id="modal-overlay" onclick="overlayClick(event)"
+    role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+
+      <div class="modal-header">
+        <h2 id="modal-title">Add Student</h2>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="f-fname">First Name *</label>
+            <input type="text" id="f-fname" placeholder="e.g. Priya" autocomplete="given-name">
+          </div>
+          <div class="form-group">
+            <label for="f-lname">Last Name *</label>
+            <input type="text" id="f-lname" placeholder="e.g. Kumar" autocomplete="family-name">
+          </div>
+          <div class="form-group">
+            <label for="f-sid">Student ID *</label>
+            <input type="text" id="f-sid" placeholder="e.g. CS2024001">
+          </div>
+          <div class="form-group">
+            <label for="f-age">Age</label>
+            <input type="number" id="f-age" placeholder="e.g. 20" min="10" max="60">
+          </div>
+          <div class="form-group full">
+            <label for="f-email">Email *</label>
+            <input type="email" id="f-email" placeholder="e.g. priya@college.edu" autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="f-dept">Department *</label>
+            <input type="text" id="f-dept" placeholder="e.g. Computer Science">
+          </div>
+          <div class="form-group">
+            <label for="f-year">Year</label>
+            <select id="f-year">
+              <option value="">Select year</option>
+              <option value="1st Year">1st Year</option>
+              <option value="2nd Year">2nd Year</option>
+              <option value="3rd Year">3rd Year</option>
+              <option value="4th Year">4th Year</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="f-phone">Phone</label>
+            <input type="text" id="f-phone" placeholder="e.g. 9876543210" autocomplete="tel">
+          </div>
+          <div class="form-group">
+            <label for="f-gpa">GPA</label>
+            <input type="number" id="f-gpa" placeholder="e.g. 8.5" step="0.1" min="0" max="10">
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveStudent()">Save Student</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="overlay" id="confirm-overlay" onclick="overlayClick(event)"
+    role="dialog" aria-modal="true">
+    <div class="modal confirm-box">
+      <div class="warn-icon" aria-hidden="true">⚠</div>
+      <h2>Delete Student?</h2>
+      <p>This will permanently remove the student profile. This action cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" onclick="closeConfirm()">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <div class="toast-dot"></div>
+    <span id="toast-msg">Saved!</span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
